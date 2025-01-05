@@ -39,12 +39,12 @@ export const data = [
                 rating:4.5
             },
             {
-                itemName:"yellow pastrie",
+                itemName:"pink pastrie",
                 price:30,
                 rating:4.5
             },
             {
-                itemName:"yellow pastrie",
+                itemName:"brown pastrie",
                 price:30,
                 rating:4.5
             }
