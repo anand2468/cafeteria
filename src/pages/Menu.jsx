@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getStorage, getDownloadURL, ref } from "firebase/storage";
 import { db } from '../services/fbservice'
@@ -52,7 +52,7 @@ const ItemSection = ({category})=>{
     },[])
 
     return (<>
-        <section id="{category}" className="">
+        <section id={category} className="">
             <h1 className="text-4xl capitalize my-4 font-serif" >
                 {category}
             </h1>
@@ -83,11 +83,22 @@ const ItemCard = ({item})=>{
             </div>
             <div className="md:max-w-[150px]">
                 <h4 className="text-l uppercase font-bold  max-w-[100%] truncate">{item.item_name}</h4>
-                <p>{item.item_price}/-</p>
+                {(typeof item.item_price == "number")? <p>{item.item_price}/-</p>: <CostCategory costs={item.item_price} /> }
                 <p>4/5</p>
             </div>
         </article>
     </>)
 }
+
+const CostCategory= ({costs})=>{
+    const [active, setActive] = useState(Object.keys(costs)[0])
+    return(<>{
+        Object.keys(costs).map((key)=>
+            <button key={key} onClick={()=>{setActive(key)}} className=  {`border px-2 m-1 rounded-md text-sm  ${(active==key)? "border-orange-400 bg-orange-50": "border-gray-400 bg-slate-100"}`}>{key}</button>
+        )}
+        <p>{costs[active]} /- </p>
+    </>)
+}
+
 
 export default Menu;

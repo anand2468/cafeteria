@@ -1,7 +1,18 @@
+import { Navigate } from "react-router-dom"
 
 const Navitem= ({item})=>{
+    const scrollToSection = () => {
+        const element = document.getElementById(item);
+        if (element) {
+            console.log('element found')
+          element.scrollIntoView({ behavior: 'smooth' }); // Smooth scrolling
+        }
+        else{
+            console.log("element not found id is" + item)
+        }
+    };
     return (
-        <article className="p-2 m-2 rounded-lg hover:bg-orange-600">
+        <article className="p-2 m-2 rounded-lg hover:bg-orange-600" onClick={scrollToSection}>
             {item}
         </article>
     )
