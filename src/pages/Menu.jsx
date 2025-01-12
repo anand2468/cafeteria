@@ -1,36 +1,74 @@
+import Header from "../components/Header";
+import Nav from '../components/Nav'
+import Footer from '../components/Footer'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getStorage, getDownloadURL, ref } from "firebase/storage";
+import { db } from '../services/fbservice'
+import { getDoc, getDocs, collection, query, where, doc } from "firebase/firestore";
 
-const Menu = ({categories, data})=>{
+const Menu = ()=>{
+
+    const {id} = useParams();
+    const [categories, setCategories] = useState(["loading..", "loading...", "loading...."]);
+
+    useEffect(()=>{
+        async function loadCategories() {
+            const snapshot = await getDoc(doc(db, id,'menu'));
+            const data =  snapshot.data()
+            setCategories(data.categories)
+        }
+        loadCategories()
+    },[])
     return (<>
+        <Header />
+        {categories && <Nav navItems={categories}/>}
         <div id="contents" className="m-5 sm:divide-y  divide-orange-400 md:w-3/4 md:m-auto">
-            {categories.map(category => <ItemSection category={category} itemList = {data}  key={category}/> )}
+            {categories && categories.map(category => <ItemSection category={category}  key={category}/> )}
         </div>
+        <Footer/>
     </>)
 }
 
-const ItemSection = ({category, itemList})=>{
+const ItemSection = ({category})=>{
+    const cafe = useParams();
+    const [items, setItems] = useState([
+        { item_name:'loading...', item_price:'__'},
+        { item_name:'loading...', item_price:'__'},
+        { item_name:'loading...', item_price:'__'},
+        { item_name:'loading...', item_price:'__'}
+    ])
+
+    useEffect(()=>{
+        async function loadItems() {
+            const q = query(collection(db, cafe.id), where('category', '==', category))
+            const datasnap = await getDocs(q);
+            setItems([])
+            datasnap.forEach(doc =>{
+            setItems(prev => [...prev, doc.data()])
+            })
+        }
+        loadItems();
+    },[])
+
     return (<>
         <section id="{category}" className="">
             <h1 className="text-4xl capitalize my-4 font-serif" >
                 {category}
             </h1>
             <div className="gap-3 overflow-x-scroll md:flex">
-                {itemList.map(item =>(item.category == category)? <ItemCard {...item}  key={Math.random()} />:null)}
+                {items.map(item =><ItemCard item ={item} key={Math.random()} />)}
             </div>
-            
         </section>
     </>)
 }
 
-const ItemCard = ({item_name, item_price})=>{
+const ItemCard = ({item})=>{
     const param =useParams()
     const [imgurl, setUrl] = useState(null)
     useEffect(()=>{
         const storage = getStorage();
-        console.log( `${param.id}/${item_name}.jpeg`)
-        const refer = ref(storage, `${param.id}/${item_name}.jpeg`)
+        const refer = ref(storage, `${param.id}/${item.item_name}.jpeg`)
         const loadurl = async ()=>{
             const imgurl = await getDownloadURL(refer);
             setUrl(imgurl);
@@ -44,8 +82,8 @@ const ItemCard = ({item_name, item_price})=>{
                 {/* <img src={url} alt="item image" className="" /> */}
             </div>
             <div className="md:max-w-[150px]">
-                <h4 className="text-l uppercase font-bold  max-w-[100%] truncate">{item_name}</h4>
-                <p>{item_price}/-</p>
+                <h4 className="text-l uppercase font-bold  max-w-[100%] truncate">{item.item_name}</h4>
+                <p>{item.item_price}/-</p>
                 <p>4/5</p>
             </div>
         </article>

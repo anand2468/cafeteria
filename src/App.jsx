@@ -1,5 +1,5 @@
 import { BrowserRouter , Route, Routes, Navigate} from "react-router-dom"
-import Zest from "./cafes/Zest"
+import Menu from "./pages/Menu"
 
 const navItems = ["coffee", 'noodles', 'pastres']
 
@@ -8,7 +8,7 @@ function App() {
   return (
   <Routes>
     <Route path="/" element={ <Navigate to= "/anand"/>}/>
-    <Route path="/:id" element={<Zest/>} />
+    <Route path="/:id" element={<Menu/>} />
     <Route path="*" element= {<p>pagenot found</p>} />
   </Routes>
   )
