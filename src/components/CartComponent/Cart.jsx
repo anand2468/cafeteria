@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import { CartContext } from "../../context/cartContext";
+import './index.css'
 
 
 const ShowCart = ()=>{
@@ -7,6 +8,14 @@ const ShowCart = ()=>{
     useEffect(()=>{
         setCart(cartitems)
     })
+
+    const handleIncr = (item)=>{
+        //need to implement handle increment of items
+    }
+    
+    const hadleDecr = (item)={
+        //need to implement handle decrement of items
+    }
 
 
     return (<>
