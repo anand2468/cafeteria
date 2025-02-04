@@ -22,7 +22,6 @@ const Menu = ()=>{
     },[])
     
     return (<>
-    <CartProvider>
         <Header />
         {categories && <Nav navItems={categories}/>}
         <div id="contents" className="m-2 sm:divide-y  divide-orange-400 md:w-3/4 md:m-auto">
@@ -30,8 +29,6 @@ const Menu = ()=>{
         </div>
         <ShowCart/>
         <Footer/>
-
-    </CartProvider>
     </>)
 }
 
