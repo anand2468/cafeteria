@@ -22,7 +22,7 @@ const Nav = ({navItems})=>{
 
     return (<>
 
-        <div id="menu" className="flex flex-wrap m-5 bg-orange-500 text-white rounded-lg">
+        <div id="menu" className="flex flex-wrap m-2 bg-orange-500 text-white rounded-lg">
             {navItems.map(item=> <Navitem item = {item} key={item}/> )}
         </div>
     </>)
